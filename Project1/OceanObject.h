@@ -12,9 +12,10 @@ public:
 	virtual void addRectY(int);
 	virtual float getRotation();
 	virtual void addRotation(float);
+	virtual SDL_Rect getRect();
+	~OceanObject();
 protected:
 	OceanObject();
-	~OceanObject();
 	Vector2d velocity;
 	float rotation;
 	SDLTexture tex;

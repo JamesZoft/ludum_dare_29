@@ -64,6 +64,17 @@ void Window::Draw(SDL_Texture *tex, SDL_Rect &dstRect, SDL_Rect *clip, float ang
 	SDL_RenderCopyEx(mRenderer.get(), tex, clip, &dstRect, angle, &pivot, flip);
 }
 
+void Window::Draw(SDL_Texture *tex, int x, int y)
+{
+	int w, h;
+	SDL_QueryTexture(tex, NULL, NULL, &w, &h);
+	SDL_Rect rect;
+	rect.x = x;
+	rect.y = y;
+	rect.w = w;
+	rect.h = h;
+	Window::Draw(tex, rect);
+}
 
 SDLTexture Window::LoadImage(const std::string& file){
 	SDLTexture texture(IMG_LoadTexture(mRenderer.get(), file.c_str()));
@@ -102,4 +113,22 @@ SDL_Rect Window::Box(){
 	//Update mBox to match the current window size
 	SDL_GetWindowSize(mWindow.get(), &mBox.w, &mBox.h);
 	return mBox;
+}
+
+bool Window::sdlRectsIntersect(SDL_Rect rectA, SDL_Rect rectB)
+{
+	return (basicSdlRectsIntersect(rectA, rectB) || basicSdlRectsIntersect(rectB, rectA));
+}
+
+bool Window::basicSdlRectsIntersect(SDL_Rect rectA, SDL_Rect rectB)
+{
+	bool horiz_overlap, vert_overlap = false;
+
+	horiz_overlap = (rectA.x >= rectB.x && rectA.x <= (rectB.x + rectB.w)) ||
+		((rectA.x + rectA.w) >= rectB.x && (rectA.x + rectA.w) <= (rectB.x + rectB.w));
+
+	vert_overlap = (rectA.y >= rectB.y && rectA.y <= (rectB.y + rectB.h)) ||
+		((rectA.y + rectA.h) >= rectB.y && (rectA.y + rectA.h) <= (rectB.y + rectB.h));
+
+	return (horiz_overlap && vert_overlap);
 }

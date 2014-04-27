@@ -52,6 +52,14 @@ public:
 	static void Draw(SDL_Texture *tex, SDL_Rect &dstRect, SDL_Rect *clip = NULL,
 		float angle = 0.0, int xPivot = 0, int yPivot = 0,
 		SDL_RendererFlip flip = SDL_FLIP_NONE);
+
+	/**
+	* Overloaded version of Draw that calculates the rect given an x and y
+	* @param tex The SDL_Texture to draw
+	* @param x The x coordinate of the rect to draw
+	* @param y The y coordinate of the rect to draw
+	*/
+	static void Draw(SDL_Texture *tex, int x, int y);
 	/**
 	*  Loads an image directly to texture using SDL_image's
 	*  built in function IMG_LoadTexture
@@ -75,6 +83,10 @@ public:
 	static void Present();
 	//Get the window's box
 	static SDL_Rect Box();
+
+	static bool sdlRectsIntersect(SDL_Rect, SDL_Rect);
+	static bool basicSdlRectsIntersect(SDL_Rect, SDL_Rect);
+
 private:
 	static std::unique_ptr<SDL_Window, void(*)(SDL_Window*)> mWindow;
 	static std::unique_ptr<SDL_Renderer, void(*)(SDL_Renderer*)> mRenderer;
